@@ -1,6 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.use(cors());
 
 const items = [
     { id: 1, name: 'Diamond Halo Stud Earrings', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'jack', image: 'http://demo.bestprestashoptheme.com/greenbee/145-large_default/diamond-halo-stud-earrings-.jpg' },
