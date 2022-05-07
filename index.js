@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { ObjectID } = require('bson');
 require('dotenv').config();
 
 const app = express();
@@ -10,29 +11,29 @@ app.use(cors());
 app.use(express.json());
 
 // const items = [
-//     { id: 1, name: 'Diamond Halo Stud Earrings', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'jack', image: 'http://demo.bestprestashoptheme.com/greenbee/145-large_default/diamond-halo-stud-earrings-.jpg' },
+//     { 'name': 'Diamond Halo Stud Earrings', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Jack', 'image': 'http://demo.bestprestashoptheme.com/greenbee/145-large_default/diamond-halo-stud-earrings-.jpg' },
 
-//     { id: 2, name: 'Diamond Halo Stud Kusto', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'kemmer', image: 'http://demo.bestprestashoptheme.com/greenbee/213-large_default/diamond-halo-stud-kusto.jpg' },
+//     { 'name': 'Diamond Halo Stud Kusto', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Kemmer', 'image': 'http://demo.bestprestashoptheme.com/greenbee/213-large_default/diamond-halo-stud-kusto.jpg' },
 
-//     { id: 3, name: 'Diamond Halo Stud Magnis', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'chemera', image: 'http://demo.bestprestashoptheme.com/greenbee/169-large_default/brown-bear-vector-graphics.jpg' },
+//     { 'name': 'Diamond Halo Stud Magnis', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Chemera', 'image': 'http://demo.bestprestashoptheme.com/greenbee/169-large_default/brown-bear-vector-graphics.jpg' },
 
-//     { id: 4, name: 'Diamond Halo Stud Massa', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'bruyna', image: 'http://demo.bestprestashoptheme.com/greenbee/204-large_default/diamond-halo-stud-massa.jpg' },
+//     { 'name': 'Diamond Halo Stud Massa', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Bruyna', 'image': 'http://demo.bestprestashoptheme.com/greenbee/204-large_default/diamond-halo-stud-massa.jpg' },
 
-//     { id: 5, name: 'Diamond Halo Stud Cum Apple', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'polard', image: 'http://demo.bestprestashoptheme.com/greenbee/248-large_default/diamond-halo-stud-cum.jpg' },
+//     { 'name': 'Diamond Halo Stud Cum Apple', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Polard', 'image': 'http://demo.bestprestashoptheme.com/greenbee/248-large_default/diamond-halo-stud-cum.jpg' },
 
-//     { id: 6, name: 'Diamond Halo Stud lychee', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'bekham', image: 'http://demo.bestprestashoptheme.com/greenbee/251-large_default/diamond-halo-stud-cum.jpg' },
+//     { 'name': 'Diamond Halo Stud lychee', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Bekham', 'image': 'http://demo.bestprestashoptheme.com/greenbee/251-large_default/diamond-halo-stud-cum.jpg' },
 
-//     { id: 7, name: 'Diamond Halo Stud Earrings', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'jack', image: 'http://demo.bestprestashoptheme.com/greenbee/145-large_default/diamond-halo-stud-earrings-.jpg' },
+//     { 'name': 'Diamond Halo Stud Earrings', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Jack', 'image': 'http://demo.bestprestashoptheme.com/greenbee/145-large_default/diamond-halo-stud-earrings-.jpg' },
 
-//     { id: 8, name: 'Diamond Halo Stud Kusto', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'kemmer', image: 'http://demo.bestprestashoptheme.com/greenbee/213-large_default/diamond-halo-stud-kusto.jpg' },
+//     { 'name': 'Diamond Halo Stud Kusto', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Kemmer', 'image': 'http://demo.bestprestashoptheme.com/greenbee/213-large_default/diamond-halo-stud-kusto.jpg' },
 
-//     { id: 9, name: 'Diamond Halo Stud Magnis', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'chemera', image: 'http://demo.bestprestashoptheme.com/greenbee/169-large_default/brown-bear-vector-graphics.jpg' },
+//     { 'name': 'Diamond Halo Stud Magnis', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Chemera', 'image': 'http://demo.bestprestashoptheme.com/greenbee/169-large_default/brown-bear-vector-graphics.jpg' },
 
-//     { id: 10, name: 'Diamond Halo Stud Massa', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'bruyna', image: 'http://demo.bestprestashoptheme.com/greenbee/204-large_default/diamond-halo-stud-massa.jpg' },
+//     { 'name': 'Diamond Halo Stud Massa', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Bruyna', 'image': 'http://demo.bestprestashoptheme.com/greenbee/204-large_default/diamond-halo-stud-massa.jpg' },
 
-//     { id: 11, name: 'Diamond Halo Stud Cum Apple', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'polard', image: 'http://demo.bestprestashoptheme.com/greenbee/248-large_default/diamond-halo-stud-cum.jpg' },
+//     { 'name': 'Diamond Halo Stud Cum Apple', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Polard', 'image': 'http://demo.bestprestashoptheme.com/greenbee/248-large_default/diamond-halo-stud-cum.jpg' },
 
-//     { id: 12, name: 'Diamond Halo Stud lychee', description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', price: '£11.71', quantity: '10', supplier: 'bekham', image: 'http://demo.bestprestashoptheme.com/greenbee/251-large_default/diamond-halo-stud-cum.jpg' }
+//     { 'name': 'Diamond Halo Stud lychee', 'description': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.', 'price': '£11.71', 'quantity': '10', 'supplier': 'Bekham', 'image': 'http://demo.bestprestashoptheme.com/greenbee/251-large_default/diamond-halo-stud-cum.jpg' }
 // ]
 
 
@@ -52,6 +53,27 @@ async function run() {
         });
         // const result = await fruitsCollection.insertMany(items);
         // console.log(`${result.insertedCount} documents were inserted`);
+
+        app.put('/fruit/:id', async (req, res) => {
+            const id = req.params.id;
+            // const newQty = { 'quantity': Number(req.body) };
+            const updateQty = req.body;
+            const filter = { _id: ObjectID(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: updateQty
+            };
+
+            const result = await fruitsCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        })
+
+        app.get('/fruit/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const fruit = await fruitsCollection.findOne(query);
+            res.send(fruit);
+        })
     }
     finally {
         // await client.close();
