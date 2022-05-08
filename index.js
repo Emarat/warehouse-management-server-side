@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const { ObjectID } = require('bson');
+const res = require('express/lib/response');
 require('dotenv').config();
 
 const app = express();
@@ -73,6 +74,13 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const fruit = await fruitsCollection.findOne(query);
             res.send(fruit);
+        })
+
+        app.delete('/fruit/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await fruitsCollection.deleteOne(query);
+            res.send(result);
         })
     }
     finally {
